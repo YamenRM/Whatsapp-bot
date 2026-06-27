@@ -1,0 +1,8 @@
+.venv
+.env
+Data
+chroma-db
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
