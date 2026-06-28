@@ -15,5 +15,5 @@ class WhatsAppService:
             )
             return message.sid
         except Exception as e:
-            print(f"❌ خطأ أثناء إرسال الرسالة إلى الواتساب: {e}")
+            print(f"Error sending WhatsApp message: {e}")
             return None

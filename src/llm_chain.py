@@ -5,14 +5,15 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, StateGraph
 from langgraph.graph.message import add_messages
-from typing import Annotated, TypedDict
+from langchain_core.messages import BaseMessage
+from typing import Annotated, TypedDict , Sequence
 from src.config import settings
 from src.Rag_engine import get_retriever
 
 
 class State(TypedDict):
     input: str
-    chat_history: Annotated[list, add_messages]
+    chat_history: Annotated[Sequence[BaseMessage], add_messages]
     context: str
     answer: str
 
@@ -43,7 +44,7 @@ def build_conversational_rag_chain():
     system_prompt = (
         "أنت مساعد ذكاء اصطناعي محترف مهني ومختص لخدمة عملاء شركة فارما كير للمنتجات الدوائية والصحية.\n"
         "استخدم الفقرات المسترجعة التالية فقط للإجابة على سؤال المستخدم بدقة عالية و بدون هلوسة.\n"
-        "إذا لم تكن الإجابة موجودة في النص المسترجع، قل بلطف: 'عذراً، ليس لدي علم دقيق بهذه المعلومة حالياً، سأقوم بتحويلك للموظف المختص لمساعدتك.' دون اختراع أي تفاصيل.\n"
+        "إذا لم تكن الإجابة موجودة في سياق النص المسترجع، قل بلطف: 'عذراً، ليس لدي علم دقيق بهذه المعلومة حالياً، سأقوم بتحويلك للموظف المختص لمساعدتك.' دون اختراع أي تفاصيل.\n"
         "تحدث بلهجة ودية، محترفة، ومباشرة.\n\n"
         "{context}"
     )
@@ -65,17 +66,18 @@ def build_conversational_rag_chain():
         })
         
         return {
-            "chat_history": [
-                ("human", state["input"]),
-                ("ai", response["answer"])
-            ],
-            "answer": response["answer"]
-        }
+        "chat_history": [
+            ("human", state["input"]),
+            ("ai", response["answer"])
+        ],
+        "answer": response["answer"]
+    }
 
     workflow = StateGraph(State)
     workflow.add_node("rag_agent", call_rag_chain)
     workflow.add_edge(START, "rag_agent")
     
+
     memory = MemorySaver()
     compiled_graph = workflow.compile(checkpointer=memory)
     
