@@ -19,7 +19,7 @@ class Settings:
     # --- System paths ---
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     DB_DIR: str = os.path.join(BASE_DIR, "chroma_db")
-    DATA_DIR: str = os.path.join(BASE_DIR, "data")
+    DATA_DIR: str = os.path.join(BASE_DIR, "Data")
 
     def validate_keys(self):
         """تأكد من أن جميع المفاتيح الأساسية صالحة"""
