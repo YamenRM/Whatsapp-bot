@@ -12,7 +12,7 @@ class Settings:
 
     # --- Model settings ---
     GEMINI_MODEL: str = "gemini-2.5-flash"
-    EMBEDDING_MODEL: str = "models/gemini-embedding-001"
+    EMBEDDING_MODEL: str = "models/gemini-embedding-2-preview"
     CHUNK_SIZE: int = 600
     CHUNK_OVERLAP: int = 100
 
