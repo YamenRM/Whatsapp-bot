@@ -1,5 +1,5 @@
 import os
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_chroma import Chroma 
@@ -11,7 +11,7 @@ def initialize_rag_system(pdf_path: str):
         raise FileNotFoundError(f"the specified PDF file does not exist: {pdf_path}")
         
     print("Loading the PDF document and splitting it into chunks...")
-    loader = PyPDFLoader(pdf_path)
+    loader = TextLoader(pdf_path, encoding="utf-8")
     documents = loader.load()
     
     text_splitter = RecursiveCharacterTextSplitter(
